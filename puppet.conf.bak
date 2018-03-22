@@ -1,0 +1,11 @@
+[main]
+ssldir = /var/lib/puppet/ssl
+
+[agent]
+server = lr1
+environment = test
+
+[master]
+vardir = /var/lib/puppet
+cadir  = /var/lib/puppet/ssl/ca
+dns_alt_names = puppet
