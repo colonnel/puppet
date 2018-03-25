@@ -1,19 +1,23 @@
+class { '::tomcat': }
+
 class tomcat8 {
- package { 'tomcat8':
-  ensure => installed,
- }
- service { 'tomcat8':
-  ensure => running,
-  require => Package[tomcat8],
- }
-
- file { 'app4.war':
- ensure => present,
- source => 'puppet:///files/app4.war',
- path => '/var/lib/tomcat8/webapps/app4.war',
- owner => 'root',
- group => 'root',
- mode => '0644',
- }
+tomcat::instance { 'tom':
+  catalina_home => '/opt/tomcat-8.5',
+  source_url => 'puppet:///modules/tomcat8/apache-tomcat-8.5.28.tar.gz',
+  catalina_base => '/opt/tomcat-8.5',
 }
-
+->tomcat::config::server::tomcat_users {
+  'tet-role-manager-script':
+    ensure        => present,
+    catalina_base => '/opt/tomcat-8.5',
+    element       => 'role',
+    element_name  => 'manager-script';
+  'tet-user-mzol':
+    ensure        => present,
+    catalina_base => '/opt/tomcat-8.5',
+    element       => 'user',
+    element_name  => 'mzol',
+    password      => 'mzol',
+    roles         => ['manager-script'];
+   }
+}
