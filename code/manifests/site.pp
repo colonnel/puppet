@@ -1,4 +1,3 @@
 node default {
- class { 'tomcat8': }
- class { 'nginx': }
+ include accounts
 }
