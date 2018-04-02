@@ -1,3 +1,9 @@
 node db{ 
-include '::mysql::server'
+include '::mysql-core::'
+}
+
+node db-slave{
+
+include '::mysql-slave::slave'
+
 }
