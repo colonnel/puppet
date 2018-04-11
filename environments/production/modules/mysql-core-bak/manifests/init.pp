@@ -1,18 +1,21 @@
-class mysql-slave::init {
+class mysql-core {
+
  class { '::mysql::server':
-    restart         	    => true,
+    restart          => true,
     root_password           => '*BB46AE99452DD250C5A791F16CDD15AC36F1993A',#523
     remove_default_accounts => true,
     override_options        => {
 	  mysqld => { 
 	  	bind-address => '0.0.0.0', #Allow remote connections
 		#Replication settings
-		'server-id' => 2,
+		'server-id' => 1,
 		'log_bin' => '/var/log/mysql/mysql-bin.log',
-		'replicate_do_db' => 'app_db',
-		'read-only' => '1',
+		'binlog_do_db' => 'app_db',
    } 
 
+    mysql_user { 'slave_user@%':
+     ensure        => 'present',
+     password_hash => mysql_password('357'),
      }
 
   mysql_grant { 'slave_user@%/*.*':
@@ -23,7 +26,7 @@ class mysql-slave::init {
         }
 
   }
-
+ }
 
  mysql::db { 'app_db':
   user => 'dbuser',
